@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SalesWebMcs.Models;
 using SalesWebMcs.Services;
 
 namespace SalesWebMcs.Controllers
@@ -7,7 +8,7 @@ namespace SalesWebMcs.Controllers
     {
         private readonly SellerService _sellerService;
 
-        public SellersController (SellerService sellerService)
+        public SellersController(SellerService sellerService)
         {
             _sellerService = sellerService;
         }
@@ -15,6 +16,19 @@ namespace SalesWebMcs.Controllers
         {
             var list = _sellerService.FindAll();
             return View(list);
+        }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Seller seller)
+        {
+            _sellerService.Insert(seller);
+            return RedirectToAction(nameof(Index));
         }
     }
 }
